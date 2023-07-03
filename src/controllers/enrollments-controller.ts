@@ -38,6 +38,11 @@ export async function getAddressFromCEP(req: AuthenticatedRequest, res: Response
     if (error.name === 'NotFoundError') {
       return res.status(httpStatus.NO_CONTENT).send(`Empty response`);
     }
+    if (error.name === 'invalidCEP') {
+      return res.status(httpStatus.NO_CONTENT).send({
+        message: error.message,
+      });
+    }
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).send(error);
   }
 }
