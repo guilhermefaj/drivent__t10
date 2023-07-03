@@ -15,7 +15,7 @@ async function getAddressFromCEP(cep: string) {
     throw cepValidation(cep);
   }
 
-  if (!result.data || result.data.erro) {
+  if (!result.data || result.data.erro === true) {
     throw notFoundError();
   }
 
@@ -60,6 +60,8 @@ async function createOrUpdateEnrollmentWithAddress(params: CreateOrUpdateEnrollm
   const address = getAddressForUpsert(params.address);
 
   // TODO - Verificar se o CEP é válido antes de associar ao enrollment.
+
+  await getAddressFromCEP(address.cep);
 
   const newEnrollment = await enrollmentRepository.upsert(params.userId, enrollment, exclude(enrollment, 'userId'));
 
